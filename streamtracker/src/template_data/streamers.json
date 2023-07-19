@@ -1,0 +1,26 @@
+{
+    "page": 0,
+    "size": 10,
+    "totalPages": 1,
+    "totalItems": 2,
+    "items": [
+        {
+            "id": "08908922-5432-473d-867c-f9009c13aa8a",
+            "externalId": "UCeDNDFHGiePy0RxgnCqAnVg",
+            "name": "KapitanBomba",
+            "url": "https://www.youtube.com/@KapitanBomba",
+            "platform": "YOUTUBE",
+            "isPartner": false,
+            "isFavourite": false
+        },
+        {
+            "id": "ed4682c3-609c-4474-a17b-2fe3de81e3bc",
+            "externalId": "UCMPKq9xxIiAtfkOFW8gYwNw",
+            "name": "NickJR",
+            "url": "https://www.youtube.com/@nickjr",
+            "platform": "YOUTUBE",
+            "isPartner": false,
+            "isFavourite": true
+        }
+    ]
+}
