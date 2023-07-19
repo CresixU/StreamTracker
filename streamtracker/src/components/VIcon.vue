@@ -1,5 +1,8 @@
 <template>
-    <i :class="icon" :style="'font-size:'+size+';color:'+color"></i>
+    <i
+        :class="icon"
+        :style="'font-size:'+size+';color:'+color">
+    </i>
 </template>
 <script>
 export default {
@@ -14,7 +17,7 @@ export default {
         },
         size: {
             String,
-            default: "16px"
+            default: "20px"
         }
     }
 }

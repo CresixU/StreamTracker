@@ -3,7 +3,9 @@
     :type="type"
     :name="name"
     :id="id"
-    :placeholder="placeholder">
+    :placeholder="placeholder"
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)">
 </template>
 
 <script>
@@ -15,8 +17,10 @@ export default {
         },
         id: String,
         name: String,
-        placeholder: String
-    }
+        placeholder: String,
+        modelValue: [Number, String]
+    },
+    emits: ['update:modelValue']
 }
 </script>
 <style scoped>
