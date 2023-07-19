@@ -12,10 +12,27 @@ const router = createRouter({
     {
       path: '/streams',
       name: 'streams',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('@/views/StreamsView.vue')
+    },
+    {
+      path: '/stream/:id',
+      name: 'stream',
+      component: () => import('@/views/StreamView.vue')
+    },
+    {
+      path: '/channel/:userId',
+      name: 'channel',
+      component: () => import('@/views/ChannelView.vue')
+    },
+    {
+      path: '/favourites',
+      name: 'favourites',
+      component: () => import('@/views/FavouritesView.vue')
+    },
+    {
+      path: '/partners',
+      name: 'partners',
+      component: () => import('@/views/PartnersView.vue')
     }
   ]
 })
