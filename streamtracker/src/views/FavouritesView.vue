@@ -11,6 +11,9 @@
                 <th colspan="2">Akcje</th>
             </tr>
         </thead>
+        <tbody>
+            <tr><td>Za mało danych</td></tr>
+        </tbody>
     </table>
 </div>
 </template>
