@@ -1,7 +1,132 @@
 $background-color: rgb(34, 40, 49);
+$background-color-hover: rgb(26, 31, 37);
 $text-color: rgb(238, 238, 238);
+$primary-color: rgb(0, 173, 181);
 
 body {
     background-color: $background-color;
     color: $text-color;
+}
+a {
+	transition: all 0.3s;
+}
+a:hover {
+	color: $primary-color;
+}
+nav {
+	a {
+		padding: 10px;
+		margin: auto 10px;
+		text-decoration: none;
+		font-size: 120%;
+		color: $text-color;
+		font-weight: 900;
+		letter-spacing: 1px;
+	} 
+}
+table {
+	th,td {
+		text-align: center;
+		padding: 20px;
+		border-bottom: 1px $text-color solid;
+	}
+}
+.clickable {
+	cursor: pointer;
+}
+
+.modal-backdrop {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.modal {
+		background: $background-color;
+		border-radius: 5px;
+		box-shadow: 2px 2px 20px 1px rgba(0, 0, 0);
+		overflow-x: auto;
+		display: flex;
+		flex-direction: column;
+		min-width: 300px;
+
+		.modal-header, .modal-footer {
+			padding: 20px;
+			display: flex;
+		}
+
+		.modal-header {
+			position: relative;
+			border-bottom: 1px solid $primary-color;
+			color: $text-color;
+			justify-content: space-between;
+			.btn-close {
+				position: absolute;
+				top: 0;
+				right: 0;
+				border: none;
+				font-size: 20px;
+				padding: 10px;
+				cursor: pointer;
+				font-weight: bold;
+				color: $primary-color;
+				background: transparent;
+			}
+		}
+		.modal-body {
+			position: relative;
+			padding: 20px 30px;
+		}
+		.modal-footer {
+			border-top: 1px solid $primary-color;
+			justify-content: space-evenly;
+			display: flex;
+		}
+	}
+}
+
+// CHART APEX
+.apexcharts-tooltip {
+    background-color: $background-color !important;
+	border: 1px solid black !important;
+	box-shadow: 2px 2px 6px -4px black !important;
+    color: $text-color;
+	.apexcharts-tooltip-title {
+		background-color: $background-color !important;
+		border-bottom: 1px solid black !important;
+	}
+}
+.apexcharts-menu {
+	background-color: $background-color !important;
+	border: 1px solid black !important;
+	box-shadow: 2px 2px 6px -4px black !important;
+    color: $text-color;
+	.apexcharts-menu-item:hover {
+		background-color: $background-color-hover!important;
+	}
+}
+
+
+
+// ANIMATIONS
+.animation-enter-active, .animation-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animation-enter-from, .animation-leave-to {
+  opacity: 0;
+  transform: translateX(-30%);
+}
+
+.fade-enter, .fade-leave-to {
+	opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity 0.5s ease;
 }
