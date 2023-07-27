@@ -20,7 +20,7 @@ const router = createRouter({
       component: () => import('@/views/StreamView.vue')
     },
     {
-      path: '/channel/:userId',
+      path: '/channel/:id',
       name: 'channel',
       component: () => import('@/views/ChannelView.vue')
     },
@@ -33,6 +33,11 @@ const router = createRouter({
       path: '/partners',
       name: 'partners',
       component: () => import('@/views/PartnersView.vue')
+    },
+    {
+      path: '/services',
+      name: 'services',
+      component: () => import('@/views/DonateServicesView.vue')
     }
   ]
 })
