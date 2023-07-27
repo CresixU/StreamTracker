@@ -15,8 +15,11 @@ button {
     color: rgb(238, 238, 238);
     font-weight: bold;
     display: block;
-    width: 200px;
-    height: 50px;
     border-radius: 5px;
+    padding: 5px 20px;
+    border: 1px solid rgb(0, 173, 181);
+}
+button:hover {
+    filter:brightness(1.2)
 }
 </style>

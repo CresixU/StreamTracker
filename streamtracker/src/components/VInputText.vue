@@ -32,5 +32,6 @@ input {
     background-color: rgba(0, 0, 0, 0.253);
     padding: 0px 10px;
     border: none;
+    outline: none;
 }
 </style>
