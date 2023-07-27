@@ -45,20 +45,53 @@
             <p>a</p>
         </div>
     </div>
+    <div class="mt-20">
+        <apexchart type="bar" :options="options" :series="series"></apexchart>
+    </div>
 </div>
 </template>
 <script>
-import stream from '@/template_data/singleStream.json'
-
 export default {
     data() {
         return {
-            data: null
+            data: null,
+            options: {
+                chart: {
+                    id: 'vuechart-example',
+                    theme: 'dark'
+                },
+                xaxis: {
+                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+                }
+            },
+            series: [{
+                name: 'Ilość widzów',
+                data: [30, 40, 45, 50, 49, 60, 70, 91]
+            }]
         }
     },
     methods: {
-        fetchData() {
-            this.data = stream;
+        async fetchData() {
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/${this.$route.params.id}`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            });
+            this.data = await response.json();
+        },
+        async fetchViews() {
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/${this.$route.params.id}/views/`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            });
+            const views = await response.json();
+            this.options.xaxis.categories = views.at;
+            this.options.series.data = views.views;
         },
         returnNewDateFormat(date) {
             if(date == null) return '-';
@@ -72,8 +105,9 @@ export default {
             return `${hours}h ${min%60}m`;
         }
     },
-    created() {
-        this.fetchData();
+    async created() {
+        await this.fetchData();
+        await this.fetchViews();
     },
     computed: {
         timeElapsed() {
@@ -93,4 +127,5 @@ export default {
 .grid > div p {
     text-align: center;
 }
+
 </style>

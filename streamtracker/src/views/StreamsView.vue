@@ -54,7 +54,14 @@ export default {
     },
     methods: {
         async fetchData() {
-            this.data = streamsJSON;
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            });
+            this.data = await response.json();
         },
         returnNewDateFormat(date) {
             if(date == null) return '-';
