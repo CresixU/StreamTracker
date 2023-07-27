@@ -1,18 +1,27 @@
 <template>
-<div class="container mx-auto px-4">
-	<nav class="flex items-center space-x-2 text-base">
+<div class="container mx-auto mt-5 px-4">
+	<nav class="flex space-x-5 justify-center">
 		<div>
-			<RouterLink to="/">Home</RouterLink>
+			<RouterLink to="/">Lista kanałów</RouterLink>
 		</div>
 		<div>
-			<RouterLink to="streams">Streamy</RouterLink>
+			<RouterLink to="/streams">Trwające streamy</RouterLink>
+		</div>
+		<div>
+			<RouterLink to="/favourites">Ulubione</RouterLink>
+		</div>
+		<div>
+			<RouterLink to="/partners">Partnerzy</RouterLink>
+		</div>
+		<div>
+			<RouterLink to="/services">Serwisy</RouterLink>
 		</div>
 	</nav>
-	<main>
-		<RouterView>
-			<!--<Transition name="animation">
+	<main class="max-w-7xl mx-auto mt-28">
+		<RouterView v-slot="{ Component }">
+			<Transition name="animation">
 				<component :is="Component" />
-			</Transition>-->
+			</Transition>
 		</RouterView>
 	</main>
 </div>
@@ -21,17 +30,5 @@
 <script>
 import { RouterLink } from 'vue-router';
 
+
 </script>
-
-<style scoped>
-.animation-enter-active,
-.animation-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.animation-enter-from,
-.animation-leave-to {
-  opacity: 0;
-  transform: translateX(-30%);
-}
-</style>
