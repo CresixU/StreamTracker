@@ -1,7 +1,9 @@
 <template>
 <div>
     <div>
-        <h1 class="text-center my-24 text-5xl">Streamer name</h1>
+        <h1 class="text-center my-24 text-5xl">
+			<a :href="data.url">{{ data.name }}</a>
+		</h1>
     </div>
     <div>
         <table class="w-full mt-6">
