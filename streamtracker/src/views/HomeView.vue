@@ -276,6 +276,15 @@ export default {
 				return;
 			}
 			//Send api request
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${id}`
+            await fetch(url, {
+                //credentials: 'include',
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
+			await fetchData(0);
 		},
 		deleteModalToggle(id = 0) {
 			this.isDeleteModalVisible = !this.isDeleteModalVisible;
