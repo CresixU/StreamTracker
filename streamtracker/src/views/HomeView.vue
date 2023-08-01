@@ -243,6 +243,14 @@ export default {
 			}
 			channel.isFavourite = !channel.isFavourite;
 			//Send api request
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${id}/favourite/toggle/`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
 		},
 		async clickPartner(id) {
 			const channel = this.data.items.find(c => c.id == id);
@@ -252,6 +260,14 @@ export default {
 			}
 			channel.isPartner = !channel.isPartner;
 			//Send api request
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${id}/partner/toggle/`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
 		},
 		async deleteChannel(id) {
 			const channel = this.data.items.find(c => c.id == id);
