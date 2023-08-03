@@ -75,7 +75,7 @@
 
 	<div class="flex">
 		<VInputText placeholder="Podaj kanał" v-model="search" v-on:input="fetchData()"></VInputText>
-		<p class="py-2 pl-5 block">Status recaptcha: xxx{{search}}</p>
+		<p class="py-2 pl-5 block">Status recaptcha: Braj implementacji</p>
 		<VButton 
 			style="margin: auto 0px auto auto; width: 200px; height: 50px;"
 			@click="this.isAddChannelModalVisible = !this.isAddChannelModalVisible">
@@ -132,24 +132,27 @@
 			</tbody>
 		</table>
 		<div class="grid grid-cols-3 mt-5">
-			<div>
+			<div class="relative mt-3">
+				<label for="page" style="top: -20px" class=" absolute">Strona</label>
 				<VInputText 
 					id="page" 
+					type="number"
 					class="bg-transparent"
 					placeholder="Wpisz stronę" 
 					style="border-radius: 5px; border-bottom: 1px solid white"
-					v-model="currentPage">
+					v-model="currentPage"
+					@input="changePage(currentPage)">
 				</VInputText>
 			</div>
 			<div>
 				<div class="pagination justify-evenly py-3 flex">
-					<div :class="{ disabled: currentPage === 1 }">
+					<div :class="{ disabled: currentPage === 0 }">
 						<a @click="changePage(currentPage - 1)">
 							<VIcon icon="bi bi-chevron-double-left"></VIcon>
 						</a>
 					</div>
 					<div>
-						{{ currentPage+1 }}
+						{{ parseInt(currentPage)+1 }}
 					</div>
 					<div :class="{ disabled: currentPage === data.totalPages }">
 						<a @click="changePage(currentPage + 1)">
@@ -158,9 +161,11 @@
 					</div>
 				</div>
 			</div>
-			<div>
+			<div class="relative mt-3">
+				<label for="page" style="top: -20px" class=" absolute">Ilość wyników</label>
 				<VInputText 
 					id="size" 
+					type="number"
 					placeholder="Wyniki na stronę"
 					class="float-right bg-transparent"
 					style="border-radius: 5px; border-bottom: 1px solid white"
@@ -211,10 +216,10 @@ export default {
 		}
 	},
 	methods: {
-		async fetchData(page = 0) {
+		async fetchData() {
             
-            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/?page=0&size=20&favourite=false&partner=false`
-            //if(this.search != '' && this.search.length > 2) url += `&SearchPhrase=${search}`
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/?page=${this.currentPage}&size=${this.pageSize}&favourite=false&partner=false`
+            if(this.search != '' && this.search.length > 2) url += `&SearchPhrase=${this.search}`
             const response = await fetch(url, {
                 //credentials: 'include',
 				headers: {
@@ -222,8 +227,10 @@ export default {
 				}
             })
 			
-			//this.data = streamersJSON
+			
             this.data = await response.json()
+			
+			//this.data = streamersJSON
         },
 		async getRecaptchaStatus() {
 			//request to api
@@ -232,7 +239,7 @@ export default {
 		async changePage(page) {
 			if (page >= 0 && page < this.data.totalPages) {
 				this.currentPage = page;
-				await this.fetchData(page);
+				await this.fetchData();
       		}
 		},
 		async clickFavourite(id) {
@@ -284,7 +291,7 @@ export default {
 					'Content-Type': 'application/json'
 				}
             })
-			await fetchData(0);
+			await this.fetchData();
 		},
 		deleteModalToggle(id = 0) {
 			this.isDeleteModalVisible = !this.isDeleteModalVisible;
