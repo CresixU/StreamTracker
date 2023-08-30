@@ -5,6 +5,7 @@
         :name="name"
         :id="id"
         @change="$emit('update:modelValue', $event.target.value)">
+            <option>Wybierz</option>
             <option :value="item" v-for="item in items">{{ item }}</option>
         </select>
     </label>
@@ -14,13 +15,13 @@
 export default {
     props: {
         items: {
-            Array,
+            String,
             required: true
         },
         id: String,
         name: String,
         placeholder: String,
-        modelValue: Array, Object
+        modelValue: String, Array
     },
     emits: ['update:modelValue']
 }

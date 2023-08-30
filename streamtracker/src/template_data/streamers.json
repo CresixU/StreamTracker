@@ -10,8 +10,8 @@
             "name": "KapitanBomba",
             "url": "https://www.youtube.com/@KapitanBomba",
             "platform": "YOUTUBE",
-            "isPartner": false,
-            "isFavourite": false
+            "partner": false,
+            "favourite": false
         },
         {
             "id": "ed4682c3-609c-4474-a17b-2fe3de81e3bc",
@@ -19,8 +19,8 @@
             "name": "NickJR",
             "url": "https://www.youtube.com/@nickjr",
             "platform": "YOUTUBE",
-            "isPartner": false,
-            "isFavourite": true
+            "partner": false,
+            "favourite": true
         }
     ]
 }
