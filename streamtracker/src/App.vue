@@ -7,12 +7,12 @@
 		<div>
 			<RouterLink to="/streams">Trwające streamy</RouterLink>
 		</div>
-		<div>
+		<!--<div>
 			<RouterLink to="/favourites">Ulubione</RouterLink>
 		</div>
 		<div>
 			<RouterLink to="/partners">Partnerzy</RouterLink>
-		</div>
+		</div>-->
 		<div>
 			<RouterLink to="/services">Serwisy</RouterLink>
 		</div>
