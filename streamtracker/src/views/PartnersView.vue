@@ -41,15 +41,15 @@
 					</td>
 					<td>
 						<VIcon 
-							:icon="channel.isFavourite ? 'bi bi-star-fill' : 'bi bi-star'" 
-							:color="channel.isFavourite ? 'yellow' : 'white'" 
+							:icon="channel.favourite ? 'bi bi-star-fill' : 'bi bi-star'" 
+							:color="channel.favourite ? 'yellow' : 'white'" 
 							@click="clickFavourite(channel.id)">
 						</VIcon>
 					</td>
 					<td>
 						<VIcon
-							:icon="channel.isPartner ? 'bi bi-award-fill' : 'bi bi-award'" 
-							:color="channel.isPartner ? 'mediumpurple' : 'white'"
+							:icon="channel.partner ? 'bi bi-award-fill' : 'bi bi-award'" 
+							:color="channel.partner ? 'mediumpurple' : 'white'"
 							@click="clickPartner(channel.id)">
 						</VIcon>
 					</td>
@@ -165,7 +165,7 @@ export default {
 				alert('Error');
 				return;
 			}
-			channel.isFavourite = !channel.isFavourite;
+			channel.favourite = !channel.favourite;
 			//Send api request
 			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${id}/favourite/toggle/`
             const response = await fetch(url, {
@@ -182,7 +182,7 @@ export default {
 				alert('Error');
 				return;
 			}
-			channel.isPartner = !channel.isPartner;
+			channel.partner = !channel.partner;
 			//Send api request
 			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${id}/partner/toggle/`
             const response = await fetch(url, {

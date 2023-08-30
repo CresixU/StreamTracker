@@ -77,7 +77,7 @@
 		</template>
 		<template v-slot:footer>
             <VButton @click="toggleModal('edit')" style="background: transparent;">Anuluj</VButton>
-			<VButton @click="addService">Dodaj serwis</VButton>
+			<VButton @click="updateService">Zapisz</VButton>
 		</template>
 	</VModalChoice>
     <div class="flex">
@@ -96,7 +96,7 @@
                     <th>Akcje</th>
                 </tr>
             </thead>
-            <tbody>
+            <TransitionGroup name="animation" tag="tbody" v-if="data">
                 <tr v-for="item in data" :key="item.id">
                     <td>
                         {{ item.name }}
@@ -119,7 +119,7 @@
                         </VIcon>
                     </td>
                 </tr>
-            </tbody>
+            </TransitionGroup>
         </table>
     </div>
 </div>
@@ -137,7 +137,7 @@ export default {
     },
     data() {
         return {
-            data: [ { "id": "9089a209-87b0-4673-bec4-4cbe21a9afea", "name": "tipple", "prefixes": [ "tipple", "Tipple" ] } ],
+            data: null,
             isDeleteModalVisible: false,
             isAddModalVisible: false,
             isEditModalVisible: false,
@@ -157,7 +157,8 @@ export default {
                     'Content-Type': 'application/json'
                 }
             });
-            this.data = response.json();
+            this.data = await response.json();
+
         },
         async toggleModal(type, id = '') {
             this.clickedServiceId = id;
@@ -185,52 +186,61 @@ export default {
                     'Content-Type': 'application/json'
                 }
             });
+            this.isDeleteModalVisible = !this.isDeleteModalVisible;
             this.fetchData();
         },
         async addService() {
-            const name = modalData.name;
-            const prefixes = modalData.prefixes.replace(' ', '').split(',');
+            const name = this.modalData.name;
+            const prefixes = this.modalData.prefixes.replace(' ', '').split(',');
             //send api request
-            const url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/${id}/`
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/`
             await fetch(url, {
                 method: 'POST',
                 //credentials: 'include',
                 headers: { 
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(`{"name": ${name}, "prefixes": ${prefixes}}`)
+                body: JSON.stringify({name: name, prefixes: prefixes})
             });
+            this.isAddModalVisible = !this.isAddModalVisible;
             this.fetchData();
         },
         async loadDataToModal() {
             //send api request by clickedServiceId
-            const url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/${this.clickedServiceId}`
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/${this.clickedServiceId}/`
             const response = await fetch(url, {
                 //credentials: 'include',
                 headers: { 
                     'Content-Type': 'application/json'
                 }
             });
-            const x = response.json();
+            const x = await response.json();
             this.modalData.name = x.name;
             this.modalData.prefixes = x.prefixes;
         },
-        async updateService(id) {
-            const name = modalData.name;
-            const prefixes = modalData.prefixes.replace(' ', '').split(',');
+        async updateService() {
+            const name = this.modalData.name;
+            let prefixes;
+            if(this.modalData.prefixes.length > 1)
+                prefixes = this.modalData.prefixes.replace(' ', '').split(',');
+            else
+                prefixes = this.modalData.prefixes;
             //send api request
-            const url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/${id}/`
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/${this.clickedServiceId}/`
             await fetch(url, {
                 method: 'PUT',
                 //credentials: 'include',
                 headers: { 
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(`{"name": ${name}, "prefixes": ${prefixes}}`)
+                body: JSON.stringify({name: name, prefixes: prefixes})
             });
             this.isEditModalVisible = !this.isEditModalVisible;
             await this.fetchData();
         }
+    },
+    created() {
+        this.fetchData();
     }
 }
 </script>
