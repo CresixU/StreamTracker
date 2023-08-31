@@ -24,5 +24,4 @@ RUN a2dissite 000-default.conf
 RUN . /etc/apache2/envvars
 RUN mkdir -p /var/run/apache2
 
-#ENTRYPOINT ["apache2ctl", "-D", "FOREGROUND"]
-ENTRYPOINT ["npm", "run", "dev"]
+ENTRYPOINT ["apache2ctl", "-D", "FOREGROUND"]
