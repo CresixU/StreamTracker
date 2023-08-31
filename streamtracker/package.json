@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "apexcharts": "^3.41.0",
+    "bootstrap-icons": "^1.10.5",
     "dotenv": "^16.3.1",
     "sass": "^1.66.1",
     "vue": "^3.3.4",

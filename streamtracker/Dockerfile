@@ -1,4 +1,4 @@
-FROM node:lts-slim
+FROM node:19.7.0
 
 WORKDIR /var/www/tracker
 
@@ -15,8 +15,6 @@ RUN chmod -R 755 /var/www/tracker
 RUN rm -rf node_modules
 RUN npm cache clean --force
 RUN npm install
-RUN npm install --dev
-RUN npm install sass
 
 RUN a2ensite tracker
 RUN a2dissite 000-default.conf
