@@ -8,7 +8,7 @@ RUN apt-get install -y systemd systemd-sysv dbus dbus-user-session
 RUN printf "systemctl start systemd-logind" >> /etc/profile
 
 COPY . .
-COPY ./config/tracker.conf /etc/apache2/sites-available/
+COPY config/tracker.conf /etc/apache2/sites-available/
 
 RUN chmod -R 755 /var/www/tracker
 
