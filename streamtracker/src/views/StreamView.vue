@@ -90,8 +90,10 @@ export default {
             this.data = await response.json();
         },
         async fetchViews() {
-            //const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/${this.$route.params.id}/views/?after=1&before=99999999999999`
-            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/0ab4dd12-d552-48db-8707-964b7e8bef7d/views/?after=1&before=99999999999999`
+            const after = new Date().getTime() - ( 24 * 60 * 60 * 1000);
+            const before = new Date().getTime();
+            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/${this.$route.params.id}/views/?after=${after}&before=${before}`;
+            //const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/0ab4dd12-d552-48db-8707-964b7e8bef7d/views/?after=1&before=99999999999999`
             const response = await fetch(url, {
                 //credentials: 'include',
 				headers: {
