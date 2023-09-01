@@ -16,6 +16,9 @@
 		<div>
 			<RouterLink to="/services">Serwisy</RouterLink>
 		</div>
+		<div>
+			<RouterLink to="/importer">Importer</RouterLink>
+		</div>
 	</nav>
 	<main class="max-w-7xl mx-auto mt-28">
 		<RouterView v-slot="{ Component }">
