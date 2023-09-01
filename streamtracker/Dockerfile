@@ -17,6 +17,7 @@ RUN npm cache clean --force
 RUN npm install
 RUN npm install --dev
 RUN npm install sass
+RUN npm run build
 
 RUN a2ensite tracker
 RUN a2dissite 000-default.conf
