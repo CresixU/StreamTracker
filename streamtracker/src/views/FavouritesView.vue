@@ -139,7 +139,7 @@ export default {
 	methods: {
 		async fetchData() {
             
-            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/?page=${this.currentPage}&size=${this.pageSize}&favourite=true&partner=false`
+            let url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/?page=${this.currentPage}&size=${this.pageSize}&favourite=true&partner=false`
             if(this.search != '' && this.search.length > 2) url += `&SearchPhrase=${this.search}`
             const response = await fetch(url, {
                 //credentials: 'include',
