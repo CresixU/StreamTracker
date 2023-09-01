@@ -127,7 +127,7 @@
 							<a :href="channel.url">{{ channel.platform }}</a>
 						</td>
 						<td>
-							{{ channel.lastCheck ? returnNewDateFormat(stream.lastCheck) : '-' }}
+							{{ channel.lastCheck ? returnNewDateFormat(channel.lastCheck) : '-' }}
 						</td>
 						<td> 
 							<RouterLink :to="{ path: `/channel/${channel.id}` }"> 
@@ -372,7 +372,11 @@ export default {
 		changeFavourite() {
 			this.filterFavourite = !this.filterFavourite;
 			this.fetchData();
-		}
+		},
+		returnNewDateFormat(date) {
+            if(date == null) return '-';
+            return `${date.substring(0,10)} ${date.substring(11,16)}`;
+        }
 		
 		
 	},
