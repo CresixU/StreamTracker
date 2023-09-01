@@ -8,6 +8,7 @@
                 <th>Rozpoczęty</th>
                 <th>Zakończony</th>
                 <th>Sprawdzony</th>
+                <th>Platforma</th>
                 <th>Szczegóły</th>
             </tr>
         </thead>
@@ -31,6 +32,9 @@
                 </td>
                 <td>
                     {{ stream.lastCheck ? returnNewDateFormat(stream.lastCheck) : '-' }}
+                </td>
+                <td>
+                    {{ stream.streamer.platform }}
                 </td>
                 <td>
                     <RouterLink :to="`/stream/${stream.id}`">
