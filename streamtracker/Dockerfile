@@ -19,6 +19,9 @@ RUN npm install --dev
 RUN npm install sass
 RUN npm run build
 
+COPY ./config/.htaccess ./dist/
+
+RUN a2enmod rewrite
 RUN a2ensite tracker
 RUN a2dissite 000-default.conf
 
