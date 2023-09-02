@@ -1,10 +1,12 @@
 <template>
 <div>
     <div v-if="platforms">
-        Start task
-        <input type="file" v-on:change="handleFileUpload( $event )">
-        <VSelect :items="platforms"></VSelect>
-        <VButton @click="startTask()">Start</VButton>
+        <h2 class=" text-lg font-bold mb-3">Start task</h2>
+        <div class="flex">
+            <input type="file" v-on:change="handleFileUpload( $event )">
+            <VSelect :items="platforms" style="min-width: 200px;" class="mx-5"></VSelect>
+            <VButton @click="startTask()">Start</VButton>
+        </div>
     </div>
     <hr class="my-10">
     <div>
@@ -86,14 +88,22 @@ export default {
             formData.append('platform', this.form.platform);
             formData.append('file', this.form.file)
 
-            const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/import/`
-            const response = await fetch(url, {
-                method: 'POST',
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				},
-                body: formData
-            })
+            try {
+                const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/import/`
+                const response = await fetch(url, {
+                    method: 'POST',
+				    headers: {
+					    'Content-Type': 'multipart/form-data'
+				    },
+                    body: formData
+                })
+                const result = await response.json();
+                await this.getTasks();
+            }
+            catch (error) {
+                alert('Nie udało sie wystartować taska');
+                console.log(error)
+            }
         },
         async getAvailablePlatforms() {
             const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/platforms/`
