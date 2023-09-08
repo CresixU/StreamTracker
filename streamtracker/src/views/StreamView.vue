@@ -37,12 +37,12 @@
         <div>
             <p>Średnia ilość widzów</p>
             <p>
-                {{ Math.round(this.returnArraySum(this.views.amout) / this.views.amout.length) }}
+                {{ this.views.amout.length > 0 ? Math.round(this.returnArraySum(this.views.amout) / this.views.amout.length) : '0' }}
             </p>
         </div>
         <div>
             <p>Największa ilość widzów</p>
-            <p>{{ Math.max(...this.views.amout) }}</p>
+            <p>{{ this.views.amout.length > 0 ? Math.max(...this.views.amout) : '0' }}</p>
         </div>
     </div>
     <div class="mt-20">
