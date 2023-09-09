@@ -353,25 +353,26 @@ export default {
             });
 			if(!response.ok) {
 				alert("Nie udało się dodać kanału");
-				return;
 			}
-			//assign extracted id do variable
-            const extractedId = await response.json()
-			//send api request to add channel
-			const url2 = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/`
-            const response2 = await fetch(url2, {
-                method: 'POST',
-                //credentials: 'include',
-                headers: { 
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({name: this.addModalData.username, externalId: extractedId.id, url: this.addModalData.channelLink, platform: this.addModalData.platform, isFavourite: this.addModalData.favourite, isPartner: this.addModalData.partner})
-            });
-			if(!response.ok) {
-				alert("Nie udało się dodać kanału");
-				return;
-			}
-            this.fetchData();
+			else {
+				const extractedId = await response.json()
+				const url2 = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/`
+            	const response2 = await fetch(url2, {
+					method: 'POST',
+					//credentials: 'include',
+					headers: { 
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({name: this.addModalData.username, externalId: extractedId.id, url: this.addModalData.channelLink, platform: this.addModalData.platform, isFavourite: this.addModalData.favourite, isPartner: this.addModalData.partner})
+            	});
+				if(!response.ok) {
+					alert("Nie udało się dodać kanału");
+				}
+				else {
+					this.isAddChannelModalVisible = false;
+					this.fetchData();
+				}
+			} 
 		},
 		changePartner() {
 			this.filterPartner = !this.filterPartner;
