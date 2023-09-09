@@ -344,18 +344,22 @@ export default {
 		},
 		async addChannel() {
 			//Send api request to extract id
-			const url = `${import.meta.env.VITE_API_KEY}/api/v1/id/?url=${this.addModalData.channelLink}&platform=${this.addModalData.platform}`
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/id/?urlOrUsername=${this.addModalData.channelLink}&platform=${this.addModalData.platform}`
             const response = await fetch(url, {
                 //credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json'
 				}
             });
+			if(!response.ok) {
+				alert("Nie udało się dodać kanału");
+				return;
+			}
 			//assign extracted id do variable
             const extractedId = await response.json()
 			//send api request to add channel
 			const url2 = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/`
-            await fetch(url2, {
+            const response2 = await fetch(url2, {
                 method: 'POST',
                 //credentials: 'include',
                 headers: { 
@@ -363,6 +367,10 @@ export default {
                 },
                 body: JSON.stringify({name: this.addModalData.username, externalId: extractedId.id, url: this.addModalData.channelLink, platform: this.addModalData.platform, isFavourite: this.addModalData.favourite, isPartner: this.addModalData.partner})
             });
+			if(!response.ok) {
+				alert("Nie udało się dodać kanału");
+				return;
+			}
             this.fetchData();
 		},
 		changePartner() {
