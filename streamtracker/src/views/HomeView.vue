@@ -111,6 +111,7 @@
 		<table class="w-full mt-6">
 			<thead>
 				<tr>
+					<th> </th>
 					<th>Nazwa kanału</th>
 					<th>ID</th>
 					<th>Źródło</th>
@@ -121,6 +122,15 @@
 			</thead>
 				<TransitionGroup name="animation" tag="tbody" v-if="data">
 					<tr v-for="channel in data.items" :key="channel.id">
+						<th>
+							<VIcon
+								av-show="channel.state != 'NORMAL'"
+								:clickable="false"
+								:icon="'bi bi-circle-fill'"
+								size="8px"
+								:color="returnColorDependOfState(channel.state)">
+							</VIcon>
+						</th>
 						<td>{{ channel.name }}</td>
 						<td>{{ channel.externalId }}</td>
 						<td>
@@ -385,8 +395,13 @@ export default {
 		returnNewDateFormat(date) {
             if(date == null) return '-';
             return `${date.substring(0,10)} ${date.substring(11,16)}`;
-        }
-		
+        },
+		returnColorDependOfState(state) {
+			if(state == 'NORMAL') return 'green'
+			else if (state == 'WARNING') return 'yellow'
+			else if (state == 'SUSPECT') return 'red'
+			else return 'lightblue'
+		}
 		
 	},
 	created() {
@@ -402,7 +417,7 @@ export default {
 }
 </script>
 <style scoped>
-i {
-	cursor: pointer;
+th:first-child, td:first-child {
+	padding: 5px;
 }
 </style>
