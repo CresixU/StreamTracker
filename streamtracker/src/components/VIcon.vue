@@ -1,6 +1,6 @@
 <template>
     <i
-        :class="icon"
+        :class="[icon, clickable ? 'clickable' : '']"
         :style="'font-size:'+size+';color:'+color">
     </i>
 </template>
@@ -18,7 +18,16 @@ export default {
         size: {
             String,
             default: "20px"
+        },
+        clickable: {
+            Boolean,
+            default: true
         }
     }
 }
 </script>
+<style scoped>
+.clickable {
+	cursor: pointer;
+}
+</style>
