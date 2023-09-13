@@ -9,7 +9,7 @@
         <div>
             <p>Nazwa kanału</p>
             <p>
-                <RouterLink :to="`/channel/${data.id}`">
+                <RouterLink :to="`/channel/${data.streamer.id}`">
                     {{ data.streamer.name }}
                 </RouterLink>
             </p>
