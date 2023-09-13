@@ -2,11 +2,20 @@
 <div>
     <label class="block">{{ placeholder }}
         <select class="w-full"
+        v-if="!isDataObject"
         :name="name"
         :id="id"
         @change="$emit('update:modelValue', $event.target.value)">
             <option>Wybierz</option>
             <option :value="item" v-for="item in items">{{ item }}</option>
+        </select>
+        <select class="w-full"
+        v-else
+        :name="name"
+        :id="id"
+        @change="$emit('update:modelValue', $event.target.value)">
+            <option>Wybierz</option>
+            <option :value="item.id" v-for="item in items">{{ item.name }}</option>
         </select>
     </label>
 </div>
@@ -15,13 +24,16 @@
 export default {
     props: {
         items: {
-            String,
             required: true
         },
         id: String,
         name: String,
         placeholder: String,
-        modelValue: String, Array
+        modelValue: String,
+        isDataObject: {
+            type: Boolean,
+            default: false
+        }
     },
     emits: ['update:modelValue']
 }
