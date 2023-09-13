@@ -20,10 +20,10 @@
 			</thead>
 			<TransitionGroup name="animation" tag="tbody" v-if="data">
 				<tr v-for="stream in streams.items" :key="stream.id">
-					<td>{{ stream.title }}</td>
-					<td>{{ returnNewDateFormat(stream.startAt) }}</td>
+					<td>{{ stream.name }}</td>
+					<td>{{ returnNewDateFormat(stream.publishedAt) }}</td>
 					<td>{{ returnNewDateFormat(stream.endedAt) }}</td>
-					<td>{{ timeElapsed }}</td>
+					<td>{{ timeElapsed(stream.publishedAt, stream.endedAt) }}</td>
 					<td> 
 						<RouterLink :to="{ path: `/stream/${stream.id}` }"> 
 							<VIcon  icon="bi bi-card-list" color="white"></VIcon>
@@ -33,8 +33,11 @@
 			</TransitionGroup>
 		</table>
 		<div v-else>
-			<h1 class=" text-2xl text-center  my-5" v-if="!data.error">Użytkownik nie prowadził streamów</h1>
-			<h1 class=" text-2xl text-center  my-5" v-else>Nie znaleziono użytkownika</h1>
+			<div v-if="data">
+				<h1 class=" text-2xl text-center  my-5" v-if="!data.error">Użytkownik nie prowadził streamów</h1>
+				<h1 class=" text-2xl text-center  my-5" v-else>Nie znaleziono użytkownika</h1>
+			</div>
+
 		</div>
 		<div class="grid grid-cols-3 mt-5" v-if="streams && !streams.error && streams.items.length > 0">
 			<div class="relative mt-3">
@@ -78,6 +81,25 @@
 					@input="changePage(currentPage)">
 				</VInputText>
 			</div>
+			<div class="mt-5">
+				<div class="flex">
+					<VSelect class="mt-5"
+						:placeholder="data.partner ? 'Donate serwis wymagane' : 'Donate serwis (opcjonalne)'"
+						label="Serwis donate"
+						:items="donateServices"
+						:isDataObject="true"
+						v-model="streamer.donateService">
+					</VSelect>
+					<div>
+						<VButton
+							style="margin: 40px 0px auto 20px; width: 200px; height: 50px; line-height: 120%"
+							@click="updateDonateService()">
+							ZAAKTUALIZUJ SERWIS
+						</VButton>
+					</div>
+				</div>
+				<p>Aktualnie wybrany: {{ data.donateService.name}}</p>
+			</div>
 		</div>
     </div>
 </div>
@@ -100,7 +122,11 @@ export default {
 			data: null,
 			streams: null,
 			currentPage: 1,
-			pageSize: 20
+			pageSize: 20,
+			donateServices: null,
+			streamer: {
+				donateService: ''
+			}
 		}
 	},
 	methods: {
@@ -113,6 +139,7 @@ export default {
 				}
             })
             this.data = await response.json()
+			if(this.data.donateService != null) this.streamer.donateService = this.data.donateService;
         },
 		async fetchStreams() {
 			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streams/?streamer_id=${this.$route.params.id}&page=${this.currentPage-1}&size=${this.pageSize}&online=false`;
@@ -139,18 +166,37 @@ export default {
 				this.currentPage = page;
 				await this.fetchData();
       		}
+		},
+		timeElapsed(publishedAt, endedAt) {
+            if(endedAt) {
+				return this.returnDurationTime(new Date(endedAt) - new Date(publishedAt));
+			}
+            return this.returnDurationTime(Date.now() - new Date(publishedAt));
+        },
+		async getDonateServices() {
+			let url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/`
+            const response = await fetch(url, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
+            this.donateServices = await response.json()
+		},
+		async updateDonateService() {
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${this.data.id}/donate-service/change/${this.streamer.donateService}/`
+            await fetch(url, {
+                //credentials: 'include',
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
 		}
 	},
-	computed: {
-        timeElapsed() {
-            if(this.data.endedAt) 
-                return this.returnDurationTime(new Date(this.data.endedAt) - new Date(this.data.publishedAt));
-            return this.returnDurationTime(Date.now() - new Date(this.data.publishedAt));
-        }
-    },
 	created() {
 		this.fetchData();
 		this.fetchStreams();
+		this.getDonateServices()
 	}
 }
 </script>
