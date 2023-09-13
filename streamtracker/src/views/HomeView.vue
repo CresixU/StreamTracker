@@ -17,6 +17,7 @@
 
 	<VModalChoice
 		v-show="isAddChannelModalVisible"
+		v-if="availablePlatforms && donateServices"
 		@close="this.isAddChannelModalVisible = !this.isAddChannelModalVisible">
 		<template v-slot:header>
 			Dodawanie nowego kanału
@@ -68,6 +69,13 @@
 					</label>
 				</div>
 			</div>
+			<VSelect class="mt-5"
+				:placeholder="addModalData.partner ? 'Donate serwis wymagane' : 'Donate serwis (opcjonalne)'"
+				label="Serwis donate"
+				:items="donateServices"
+				:isDataObject="true"
+				v-model="addModalData.donateService">
+			</VSelect>
 		</template>
 		<template v-slot:footer>
 			<VButton @click="addChannel">Dodaj kanał</VButton>
@@ -80,10 +88,10 @@
 			<span class="font-bold">Portfel:</span>
 			<br>{{ recaptchaStatus.balance }}
 		</p>
-		<div style="min-width: 250px" class="mx-auto">
+		<div class="mx-auto px-8">
 			<h4 class="text-center font-bold">Filtry</h4>
 			<div class="flex justify-around mx-auto">
-				<div @click="changeFavourite()" class="clickable">
+				<div @click="changeFavourite()" class="clickable px-2">
 					<VIcon 
 						:icon="filterFavourite ? 'bi bi-star-fill' : 'bi bi-star'" 
 						:color="filterFavourite ? 'yellow' : 'white'" 
@@ -91,13 +99,21 @@
 					</VIcon>
 					<span :style="filterFavourite ? 'color: yellow;' : ''"> Ulubiony </span>
 				</div>
-				<div @click="changePartner()" class="clickable">
+				<div @click="changePartner()" class="clickable px-2">
 					<VIcon
 						:icon="filterPartner ? 'bi bi-award-fill' : 'bi bi-award'" 
 						:color="filterPartner ? 'mediumpurple' : 'white'"
 						>
 					</VIcon>
 					<span :style="filterPartner ? 'color: mediumpurple;' : ''"> Partner </span>
+				</div>
+				<div @click="changeStatus()" class="clickable px-2">
+					<VIcon
+						:icon="filterState ? 'bi bi-exclamation-triangle-fill' : 'bi bi-exclamation-triangle'"
+						:color="filterState ? 'yellow' : 'white'"
+						>
+					</VIcon>
+					<span :style="filterState ? 'color: yellow;' : ''"> Status </span>
 				</div>
 			</div>
 		</div>
@@ -124,14 +140,17 @@
 					<tr v-for="channel in data.items" :key="channel.id">
 						<th>
 							<VIcon
-								av-show="channel.state != 'NORMAL'"
 								:clickable="false"
 								:icon="'bi bi-circle-fill'"
 								size="8px"
 								:color="returnColorDependOfState(channel.state)">
 							</VIcon>
 						</th>
-						<td>{{ channel.name }}</td>
+						<td>
+							<RouterLink :to="`/channel/${channel.id}`">
+								{{ channel.name }}
+							</RouterLink>
+						</td>
 						<td>{{ channel.externalId }}</td>
 						<td>
 							<a :href="channel.url">{{ channel.platform }}</a>
@@ -234,6 +253,7 @@ export default {
 	data() {
 		return {
 			data: null,
+			donateServices: null,
 			currentPage: 1,
 			search: '',
 			pageSize: 20,
@@ -246,16 +266,18 @@ export default {
 				channelLink: '',
 				platform: null,
 				favourite: false,
-				partner: false
+				partner: false,
+				donateService: null
 			},
 			availablePlatforms: null,
 			filterPartner: false,
-			filterFavourite: false
+			filterFavourite: false,
+			filterState: false
 		}
 	},
 	methods: {
 		async fetchData() {
-            let url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/?page=${this.currentPage-1}&size=${this.pageSize}&favourite=${this.filterFavourite}&partner=${this.filterPartner}`
+            let url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/?page=${this.currentPage-1}&size=${this.pageSize}&favourite=${this.filterFavourite}&partner=${this.filterPartner}&sort_by_state=${this.filterState}`
             if(this.search != '' && this.search.length > 2) url += `&search=${this.search}`
             const response = await fetch(url, {
                 //credentials: 'include',
@@ -279,6 +301,15 @@ export default {
 				}
             })
             this.recaptchaStatus = await response.json()
+		},
+		async getDonateServices() {
+			let url = `${import.meta.env.VITE_API_KEY}/api/v1/donates/`
+            const response = await fetch(url, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
+            this.donateServices = await response.json()
 		},
 		async changePage(page) {
 			if (page >= 0 && page < this.data.totalPages) {
@@ -365,6 +396,10 @@ export default {
 				alert("Nie udało się dodać kanału");
 			}
 			else {
+				if(this.addModalData.isPartner && this.addModalData.donateService == null) {
+					alert("Pole donate serwis jest wymagane jeśli osoba jest partnerem");
+					return;
+				}
 				const extractedId = await response.json()
 				const url2 = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/`
             	const response2 = await fetch(url2, {
@@ -392,6 +427,10 @@ export default {
 			this.filterFavourite = !this.filterFavourite;
 			this.fetchData();
 		},
+		changeStatus() {
+			this.filterState = !this.filterState;
+			this.fetchData();	
+		},
 		returnNewDateFormat(date) {
             if(date == null) return '-';
             return `${date.substring(0,10)} ${date.substring(11,16)}`;
@@ -404,10 +443,11 @@ export default {
 		}
 		
 	},
-	created() {
-		this.fetchData();
-		this.getAvailablePlatforms();
-		this.getRecaptchaStatus();
+	async created() {
+		await this.fetchData();
+		await this.getAvailablePlatforms();
+		await this.getRecaptchaStatus();
+		await this.getDonateServices();
 	},
     watch: {
         pageSize() {
