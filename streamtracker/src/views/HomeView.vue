@@ -140,6 +140,7 @@
 					<tr v-for="channel in data.items" :key="channel.id">
 						<th>
 							<VIcon
+								v-show="channel.partner"
 								:clickable="false"
 								:icon="'bi bi-circle-fill'"
 								size="8px"
