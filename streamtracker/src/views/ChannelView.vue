@@ -5,7 +5,7 @@
 			<a :href="data.url">{{ data.name }}</a>
 		</h1>
     </div>
-	<div v-if="data" class="mt-5">
+	<div v-if="data && streams?.items?.length > 0" class="mt-5">
 		<div class="flex">
 			<VSelect class="mt-5"
 				:placeholder="data.partner ? 'Donate serwis wymagane' : 'Donate serwis (opcjonalne)'"
