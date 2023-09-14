@@ -5,6 +5,28 @@
 			<a :href="data.url">{{ data.name }}</a>
 		</h1>
     </div>
+	<div v-if="data" class="mt-5">
+		<div class="flex">
+			<VSelect class="mt-5"
+				:placeholder="data.partner ? 'Donate serwis wymagane' : 'Donate serwis (opcjonalne)'"
+				label="Serwis donate"
+				:items="donateServices"
+				:isDataObject="true"
+				v-model="streamer.donateService">
+			</VSelect>
+			<div>
+				<VButton
+					style="margin: 40px 0px auto 20px; width: 200px; height: 50px; line-height: 120%"
+					@click="updateDonateService()">
+					ZAAKTUALIZUJ SERWIS
+				</VButton>
+			</div>
+		</div>
+		<p>Aktualnie wybrany: 
+			<span v-if="data.donateService">{{ data.donateService.name}}</span>
+			<span v-else >Brak</span>
+		</p>
+	</div>
     <div>
         <table
 		 	class="w-full mt-6"
@@ -80,25 +102,6 @@
 					v-model="pageSize"
 					@input="changePage(currentPage)">
 				</VInputText>
-			</div>
-			<div class="mt-5">
-				<div class="flex">
-					<VSelect class="mt-5"
-						:placeholder="data.partner ? 'Donate serwis wymagane' : 'Donate serwis (opcjonalne)'"
-						label="Serwis donate"
-						:items="donateServices"
-						:isDataObject="true"
-						v-model="streamer.donateService">
-					</VSelect>
-					<div>
-						<VButton
-							style="margin: 40px 0px auto 20px; width: 200px; height: 50px; line-height: 120%"
-							@click="updateDonateService()">
-							ZAAKTUALIZUJ SERWIS
-						</VButton>
-					</div>
-				</div>
-				<p>Aktualnie wybrany: {{ data.donateService.name}}</p>
 			</div>
 		</div>
     </div>
