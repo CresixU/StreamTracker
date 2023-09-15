@@ -2,27 +2,58 @@
 <div>
     <div>
         <h1 class="text-center my-24 text-5xl" v-if="data">
+			<VIcon
+				v-if="data.partner"
+				:clickable="false"
+				:icon="'bi bi-circle-fill'"
+				size="20px"
+				style="display: inline-flex; justify-content: center"
+				class="py-4 mr-3"
+				:color="returnColorDependOfState(data.state)">
+			</VIcon>
 			<a :href="data.url">{{ data.name }}</a>
 		</h1>
     </div>
 	<div v-if="data && streams?.items?.length > 0" class="mt-5">
-		<div class="flex">
-			<VSelect class="mt-5"
-				:placeholder="data.partner ? 'Donate serwis wymagane' : 'Donate serwis (opcjonalne)'"
-				label="Serwis donate"
-				:items="donateServices"
-				:isDataObject="true"
-				v-model="streamer.donateService">
-			</VSelect>
-			<div>
-				<VButton
-					style="margin: 40px 0px auto 20px; width: 200px; height: 50px; line-height: 120%"
-					@click="updateDonateService()">
-					ZAAKTUALIZUJ SERWIS
-				</VButton>
+		<div class="flex  justify-between">
+			<div class="flex">
+				<VSelect class="mt-5"
+					placeholder="Donate serwis"
+					label="Serwis donate"
+					:items="donateServices"
+					:isDataObject="true"
+					v-model="streamer.donateService">
+				</VSelect>
+				<div>
+					<VButton
+						style="margin: 40px 0px auto 20px; width: 200px; height: 50px; line-height: 120%"
+						@click="updateDonateService()">
+						ZAAKTUALIZUJ SERWIS
+					</VButton>
+				</div>
+			</div>
+			<div class="flex">
+				<div class="px-5 py-8 flex clickable" @click="clickFavourite(data.id)">
+					<VIcon 
+						:icon="data.favourite ? 'bi bi-star-fill' : 'bi bi-star'" 
+						:color="data.favourite ? 'yellow' : 'white'" 
+						size="40px"
+						>
+					</VIcon>
+					<span :style="this.data.favourite ? 'color: yellow;' : ''" class=" grid content-center ml-3"> Ulubiony </span>
+				</div>
+				<div class="px-5 py-8 flex clickable" @click="clickPartner(data.id)">
+					<VIcon
+						:icon="data.partner ? 'bi bi-award-fill' : 'bi bi-award'" 
+						:color="data.partner ? 'mediumpurple' : 'white'"
+						size="40px"
+						>
+					</VIcon>
+					<span :style="this.data.partner ? 'color: mediumpurple;' : ''" class=" grid content-center ml-3"> Partner </span>
+				</div>
 			</div>
 		</div>
-		<p>Aktualnie wybrany: 
+		<p style="margin-top: -30px">Aktualnie wybrany: 
 			<span v-if="data.donateService">{{ data.donateService.name}}</span>
 			<span v-else >Brak</span>
 		</p>
@@ -194,6 +225,36 @@ export default {
 					'Content-Type': 'application/json'
 				}
             })
+		},
+		async clickFavourite(id) {
+			this.data.favourite = !this.data.favourite;
+			//Send api request
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${id}/favourite/toggle/`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
+		},
+		async clickPartner(id) {
+			this.data.partner = !this.data.partner;
+			//Send api request
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/${id}/partner/toggle/`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            })
+		},
+		returnColorDependOfState(state) {
+			if(state == 'NORMAL') return 'green'
+			else if (state == 'WARNING') return 'yellow'
+			else if (state == 'SUSPECT') return 'red'
+			else return 'lightblue'
 		}
 	},
 	created() {
