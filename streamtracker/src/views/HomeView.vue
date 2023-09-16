@@ -88,7 +88,12 @@
 			<span class="font-bold">Portfel:</span>
 			<br>{{ recaptchaStatus.balance }}
 		</p>
-		<div class="mx-auto px-8">
+		<div class="mx-auto text-center">
+			<span class="font-bold">Quotas:</span><br>
+			<span v-if="quotas"> <span :style="'color: '+returnColorByPercent(quotas.used/quotas.limit)">{{ quotas.used }}</span> / {{ quotas.limit }}</span>
+			<span v-else>Loading data...</span>
+		</div>
+		<div class="mx-auto">
 			<h4 class="text-center font-bold">Filtry</h4>
 			<div class="flex justify-around mx-auto">
 				<div @click="changeFavourite()" class="clickable px-2">
@@ -255,6 +260,7 @@ export default {
 		return {
 			data: null,
 			donateServices: null,
+			quotas: null,
 			currentPage: 1,
 			search: '',
 			pageSize: 20,
@@ -384,6 +390,17 @@ export default {
 			this.availablePlatforms = await response.json();
 			
 		},
+		async getQuotas() {
+			const url = `${import.meta.env.VITE_API_KEY}/api/v1/quotes/info/`
+            const response = await fetch(url, {
+                //credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+            });
+			this.quotas = await response.json();
+			
+		},
 		async addChannel() {
 			//Send api request to extract id
 			const url = `${import.meta.env.VITE_API_KEY}/api/v1/id/?urlOrUsername=${this.addModalData.channelLink}&platform=${this.addModalData.platform}`
@@ -441,6 +458,22 @@ export default {
 			else if (state == 'WARNING') return 'yellow'
 			else if (state == 'SUSPECT') return 'red'
 			else return 'lightblue'
+		},
+		returnColorByPercent(percent) {
+			percent *= 100
+			console.log(percent)
+			var r, g, b = 0;
+			if(percent>=50) {
+				g=510-percent*6;
+				r=255;
+				if(g<0) g=0;
+			}
+			else {
+				r=percent*6;
+				g=255;
+				if(r>255) r=255;
+			}
+			return `rgb(${r},${g},${b})`; 
 		}
 		
 	},
@@ -449,6 +482,7 @@ export default {
 		await this.getAvailablePlatforms();
 		await this.getRecaptchaStatus();
 		await this.getDonateServices();
+		await this.getQuotas();
 	},
     watch: {
         pageSize() {

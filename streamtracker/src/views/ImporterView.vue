@@ -2,13 +2,15 @@
 <div>
     <div v-if="platforms">
         <h2 class=" text-lg font-bold mb-3">Start task</h2>
-        <div class="flex">
-            <input type="file" v-on:change="handleFileUpload( $event )">
-            <VSelect :items="platforms" style="min-width: 200px;" class="mx-5"></VSelect>
-            <VButton @click="startTask()">Start</VButton>
-        </div>
+        <form id="form">
+            <div class="flex">
+                <input type="file" id="file" v-on:change="handleFileUpload( $event )">
+                <VSelect :items="platforms" style="min-width: 200px;" class="mx-5" id="platform" v-model="form.platform"></VSelect>
+                <VButton @click="startTask()">Start</VButton>
+            </div>
+        </form>
     </div>
-    <hr class="my-10">
+    <div class="my-10"></div>
     <div>
         <table class="w-full mt-6">
             <thead>
@@ -59,7 +61,7 @@ export default {
             const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/import/statuses/`
             const response = await fetch(url, {
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json' 
 				}
             })
             this.statuses = await response.json()
@@ -83,20 +85,20 @@ export default {
             this.tasks = await response.json()
         },
         async startTask() {
-            let formData = new FormData();
+            let formData = new FormData(form);
 
             formData.append('platform', this.form.platform);
             formData.append('file', this.form.file)
-
             try {
                 const url = `${import.meta.env.VITE_API_KEY}/api/v1/streamers/import/`
                 const response = await fetch(url, {
                     method: 'POST',
 				    headers: {
-					    'Content-Type': 'multipart/form-data'
+					    'Content-Type': 'multipart/form-data;  boundary=----WebKitFormBoundaryyEmKNDsBKjB7QEqu'
 				    },
                     body: formData
                 })
+                
                 const result = await response.json();
                 await this.getTasks();
             }
