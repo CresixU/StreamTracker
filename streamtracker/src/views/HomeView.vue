@@ -426,7 +426,7 @@ export default {
 					headers: { 
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({name: this.addModalData.username, externalId: extractedId.id, url: this.addModalData.channelLink, platform: this.addModalData.platform, isFavourite: this.addModalData.favourite, isPartner: this.addModalData.partner})
+					body: JSON.stringify({name: this.addModalData.username, externalId: extractedId.id, url: this.addModalData.channelLink, platform: this.addModalData.platform, isFavourite: this.addModalData.favourite, isPartner: this.addModalData.partner, donateServiceId: this.addModalData.donateService})
             	});
 				if(!response.ok) {
 					alert("Nie udało się dodać kanału");
