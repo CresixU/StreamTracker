@@ -101,8 +101,9 @@ export default {
 				}
             });
             const temp = await response.json();
-            this.views.at = temp.map(e => this.returnNewDateFormat(e.at));
-            this.views.amout = temp.map(e => e.views);
+            let views = temp.filter(view => !temp.some(v => v.at === view.at && v.id !== view.id));
+            this.views.at = views.map(e => this.returnNewDateFormat(e.at));
+            this.views.amout = views.map(e => e.views);
             this.options.xaxis.categories = this.views.at;
             this.series[0].data = this.views.amout;
             this.isChartLoaded = true;
